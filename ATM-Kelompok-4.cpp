@@ -5,25 +5,25 @@ using namespace std;
 //Inisiasi variable-variable
 string pin = "241063";
 int saldo = 1170000;//1.170.000
-int pilihan_bahasa;
 
 //inisiasi function
 void tampilan_awal();
 void kartu_atm();
-void input_pilihan_bahasa();
+char input_pilihan_bahasa();
+void inputPin_INA();
+void inputPin_ENG();
 
 //Program Utama
 int main()
 {
     tampilan_awal();
     kartu_atm();
-    input_pilihan_bahasa();
-    if (pilihan_bahasa == 1)
+    if (input_pilihan_bahasa() == '1')
     {
-        cout << "Bangga dengan Bahasa Persatuan";
-    }else if (pilihan_bahasa == 2)
+        inputPin_INA();
+    }else
     {
-        cout << "Continue in English";
+        inputPin_ENG();
     }
     
     return 0;
@@ -67,8 +67,9 @@ void kartu_atm()
         system("cls");
     }
 }
-void input_pilihan_bahasa()
+char input_pilihan_bahasa()
 {
+    char pilihan_bahasa;
     pilihBahasa://label untuk statement goto
     cout << "=============================================" << endl;
     cout << "\tSilakan pilih bahasa Anda" << endl;
@@ -76,7 +77,7 @@ void input_pilihan_bahasa()
     cout << "\t\b\bPlease select your language\n\n";
     cout << "1. Indonesia\n2. English\nMasukkan input(1/2):";
     cin >> pilihan_bahasa;
-    if (pilihan_bahasa != 1 && pilihan_bahasa !=2)
+    if (pilihan_bahasa != '1' && pilihan_bahasa !='2')
     {
         Sleep(500);
         system("cls");
@@ -92,4 +93,49 @@ void input_pilihan_bahasa()
         system("cls");
         goto pilihBahasa;//statement goto, ketika dijalankan program langsung/balik lagi menuju ke label.
     }
+    if (pilihan_bahasa == '1')
+    {
+        return '1';
+    }else
+    {
+        return '2';
+    }
+    
+}
+void inputPin_INA()
+{
+    string input_pin;
+    int hitungPinSalah = 0;
+    do
+    {
+        cout << "=============================================" << endl;
+        cout << "\tMasukkan Pin Anda: " <<endl;
+        cout << "\t\t"; cin >> input_pin;
+        cout << "=============================================" << endl;
+        if (input_pin == pin)
+        {
+            system("cls");
+        }else
+        {
+            cout << "=============================================" << endl;
+            cout << "\tPin yang Anda masukkan salah" << endl;
+            cout << "\nSilakan masukkan kembali pin Anda" << endl;
+            cout << "Peringatan! Anda akan diblokir jika melakukan\nlebih dari 3 kali percobaan" << endl;
+            cout << "=============================================" << endl;
+            hitungPinSalah++;
+            system("pause");
+            system("cls");
+            if (hitungPinSalah > 2)
+            {
+                cout << "=============================================" << endl;
+                cout << "Demi alasan keamanan Anda tidak dapat \nbertransaksi untuk sementara waktu." << endl;
+                cout << "Silakan ambil kembali kartu Anda" << endl;
+                cout << "=============================================" << endl;
+                system("pause");
+                exit(0);
+            }
+            
+        }
+    } while (input_pin != pin && hitungPinSalah > 2);
+    
 }
