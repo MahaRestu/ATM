@@ -5,12 +5,12 @@ using namespace std;
 //Inisiasi variable-variable
 string pin = "241063";
 int saldo = 1170000;//1.170.000
-char pilihan_bahasa;
+int pilihan_bahasa;
 
 //inisiasi function
 void tampilan_awal();
 void kartu_atm();
-int input_pilihan_bahasa();
+void input_pilihan_bahasa();
 
 //Program Utama
 int main()
@@ -18,13 +18,12 @@ int main()
     tampilan_awal();
     kartu_atm();
     input_pilihan_bahasa();
-    if (input_pilihan_bahasa() == 1);
+    if (pilihan_bahasa == 1)
     {
         cout << "Bangga dengan Bahasa Persatuan";
-    }
-    else
+    }else if (pilihan_bahasa == 2)
     {
-        /* code */
+        cout << "Continue in English";
     }
     
     return 0;
@@ -68,9 +67,8 @@ void kartu_atm()
         system("cls");
     }
 }
-int input_pilihan_bahasa()
+void input_pilihan_bahasa()
 {
-    char pilihan_bahasa;
     pilihBahasa://label untuk statement goto
     cout << "=============================================" << endl;
     cout << "\tSilakan pilih bahasa Anda" << endl;
@@ -78,7 +76,7 @@ int input_pilihan_bahasa()
     cout << "\t\b\bPlease select your language\n\n";
     cout << "1. Indonesia\n2. English\nMasukkan input(1/2):";
     cin >> pilihan_bahasa;
-    if (pilihan_bahasa != 1 || pilihan_bahasa !=2)
+    if (pilihan_bahasa != 1 && pilihan_bahasa !=2)
     {
         Sleep(500);
         system("cls");
@@ -91,16 +89,7 @@ int input_pilihan_bahasa()
         cout << "=============================================" << endl;
 
         system("pause");//menghentikan program sampai user menekan tombol ,manapun
+        system("cls");
         goto pilihBahasa;//statement goto, ketika dijalankan program langsung/balik lagi menuju ke label.
-    }else if (pilihan_bahasa == 1)
-    {
-        Sleep(500);
-        system("cls");
-        return 1;
-    }else
-    {
-        Sleep(500);
-        system("cls");
-        return 2;
     }
 }
