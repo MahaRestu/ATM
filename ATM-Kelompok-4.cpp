@@ -11,19 +11,24 @@ void tampilan_awal();
 void kartu_atm();
 char input_pilihan_bahasa();
 void inputPin_INA();
+int menu_INA();
 void inputPin_ENG();
+int menu_ENG();
 
 //Program Utama
 int main()
 {
     tampilan_awal();
     kartu_atm();
-    if (input_pilihan_bahasa() == '1')
+    char pilihan_bahasa = input_pilihan_bahasa();
+    if (pilihan_bahasa == '1')
     {
         inputPin_INA();
+        menu_INA();
     }else
     {
         inputPin_ENG();
+        menu_ENG();
     }
     
     return 0;
@@ -93,13 +98,7 @@ char input_pilihan_bahasa()
         system("cls");
         goto pilihBahasa;//statement goto, ketika dijalankan program langsung/balik lagi menuju ke label.
     }
-    if (pilihan_bahasa == '1')
-    {
-        return '1';
-    }else
-    {
-        return '2';
-    }
+    return pilihan_bahasa;
     
 }
 void inputPin_INA()
@@ -108,34 +107,100 @@ void inputPin_INA()
     int hitungPinSalah = 0;
     do
     {
+        system("cls");
         cout << "=============================================" << endl;
-        cout << "\tMasukkan Pin Anda: " <<endl;
-        cout << "\t\t"; cin >> input_pin;
+        cout << "\t\t\b\bMasukkan Pin Anda: " <<endl;
+        cout << "\t\t\t\b\b"; cin >> input_pin;
         cout << "=============================================" << endl;
         if (input_pin == pin)
         {
             system("cls");
         }else
         {
+            system("cls");
             cout << "=============================================" << endl;
             cout << "\tPin yang Anda masukkan salah" << endl;
             cout << "\nSilakan masukkan kembali pin Anda" << endl;
-            cout << "Peringatan! Anda akan diblokir jika melakukan\nlebih dari 3 kali percobaan" << endl;
+            cout << "Peringatan! Anda akan diblokir jika memasukkan\npin yang salah sebanyak 3 kali" << endl;
             cout << "=============================================" << endl;
             hitungPinSalah++;
             system("pause");
-            system("cls");
             if (hitungPinSalah > 2)
             {
+                system("cls");
                 cout << "=============================================" << endl;
                 cout << "Demi alasan keamanan Anda tidak dapat \nbertransaksi untuk sementara waktu." << endl;
-                cout << "Silakan ambil kembali kartu Anda" << endl;
+                cout << "\n\nSilakan ambil kembali kartu Anda" << endl;
                 cout << "=============================================" << endl;
                 system("pause");
                 exit(0);
             }
             
         }
-    } while (input_pin != pin && hitungPinSalah > 2);
+    } while (input_pin != pin && hitungPinSalah < 3);
     
+}
+void inputPin_ENG()
+{
+    string input_pin;
+    int incorrectPinCount = 0;
+    do
+    {
+        system("cls");
+        cout << "=============================================" << endl;
+        cout << "\t\tEnter your Pin: " <<endl;
+        cout << "\t\t\t\b\b"; cin >> input_pin;
+        cout << "=============================================" << endl;
+        if (input_pin == pin)
+        {
+            system("cls");
+        }else
+        {
+            system("cls");
+            cout << "=============================================" << endl;
+            cout << "\tYou entered an incorrect pin" << endl;
+            cout << "\nPlease enter your pin again" << endl;
+            cout << "Warning! You will be blocked if you enter the\nincorrect pin 3 times" << endl;
+            cout << "=============================================" << endl;
+            incorrectPinCount++;
+            system("pause");
+            if (incorrectPinCount > 2)
+            {
+                system("cls");
+                cout << "=============================================" << endl;
+                cout << "For security reason you will be temporarily\nunable to transact" << endl;
+                cout << "\n\nPlease take back your card" << endl;
+                cout << "=============================================" << endl;
+                system("pause");
+                exit(0);
+            }
+            
+        }
+    } while (input_pin != pin && incorrectPinCount < 3);
+}
+int menu_INA()
+{
+    int pilihanMenu;
+    cout << "=============================================" << endl;
+    cout << "\t\tMenu Utama" << endl;
+    cout << " Silakan pilih transaksi yang Anda inginkan" << endl;
+    cout << "\n1. Tarik Tunai\t\t3. Transfer" << endl;
+    cout << "2. Setor Tunai\t\t4. Info Saldo" <<endl;
+    cout << "Masukkan pilihan transaksi Anda (1/2/3/4): "; cin >> pilihanMenu;
+    cout << "=============================================" << endl;
+    system("cls");
+    return pilihanMenu;
+}
+int menu_ENG()
+{
+    int selectedMenu;
+    cout << "=============================================" << endl;
+    cout << "\t\t  Main Menu" << endl;
+    cout << " Choose your prefered transaction" << endl;
+    cout << "\n1. Withdraw\t\t3. Transfer" << endl;
+    cout << "2. Cash Deposit\t\t4. Balance Info" <<endl;
+    cout << "enter your selected transaction(1/2/3/4): "; cin >> selectedMenu;
+    cout << "=============================================" << endl;
+    system("cls");
+    return selectedMenu;
 }
