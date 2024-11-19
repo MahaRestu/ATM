@@ -5,6 +5,8 @@ using namespace std;
 
 //Deklarasi variable
 int id_kartu_atm;//identitas user selama menggunakan program
+string inputRekening;
+int uang_transfer;
 
 //Inisialisasi Database
 database dataNasabah[banyakData] =
@@ -24,11 +26,15 @@ void tarikTunai();
 void setor_tunai();
 void tampilkanSaldo();
 void saldoTidakCukup();
+int cariIndeksDariRekening();
+void transfer_INA();
 
 void invalid_input_ENG();
 void inputPin_ENG();
 int menu_ENG();
 void withdraw();
+void cashDeposit();
+void transfer_ENG();
 void displayBalance();
 void insufficientBalance();
 
@@ -58,10 +64,10 @@ int main()
             tarikTunai();
         }else if (pilihanMenu == '2')
         {
-            /* code */
+            setor_tunai();
         }else if (pilihanMenu == '3')
         {
-            /* code */
+            transfer_INA();
         }else if (pilihanMenu == '4')
         {
             //dikosongkan supaya langsung menuju tampilkanSaldo()
@@ -107,10 +113,10 @@ int main()
             withdraw();
         }else if (selectedMenu == '2')
         {
-            /* code */
+            cashDeposit();
         }else if (selectedMenu == '3')
         {
-            /* code */
+            transfer_ENG();
         }else if (selectedMenu == '4')
         {
         }else
@@ -166,6 +172,85 @@ void invalid_input_ENG()
     cout << "\t\b\bInvalid input. Please try again" << endl;
     cout << "=============================================" << endl;
     system("pause");
+}
+int cariIndeksDariRekening()
+{
+    for (int i = 0; i < banyakData; i++)
+    {
+        if (dataNasabah[i].noRekening == inputRekening)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+void transfer_INA()
+{
+    system("cls");
+    menuTransfer:
+    cout << "=============================================" << endl;
+    cout << "\t\t\t\b\b\bTransfer"<< endl;
+    cout << "Masukkan saldo: Rp "; cin >> uang_transfer;
+    if (dataNasabah[id_kartu_atm].saldo < uang_transfer)
+    {
+        saldoTidakCukup();
+        goto menuTransfer;
+    }
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "Masukkan nomer rekening yang Anda tuju: "; cin >> inputRekening;
+    system("cls");
+    int indeksTujuan = cariIndeksDariRekening();
+    if (indeksTujuan == -1)
+    {
+        cout << "=============================================" << endl;
+        cout << "Nomer rekening tidak ditemukan\nSilakan coba lagi" << endl;
+        cout << "=============================================" << endl;
+        system("pause");
+        goto menuTransfer;
+    }else
+    {
+        dataNasabah[id_kartu_atm].saldo -= uang_transfer;
+        dataNasabah[indeksTujuan].saldo += uang_transfer;
+        cout << "=============================================" << endl;
+        cout << "\n\t\t\b\bTransaksi Berhasil!\n" << endl;
+        cout << "=============================================" << endl;
+        Sleep(3000);
+    }
+}
+void transfer_ENG()
+{
+     system("cls");
+    menuTransfer:
+    cout << "=============================================" << endl;
+    cout << "\t\t\t\b\b\bTransfer"<< endl;
+    cout << "Input balance: Rp "; cin >> uang_transfer;
+    if (dataNasabah[id_kartu_atm].saldo < uang_transfer)
+    {
+        insufficientBalance();
+        goto menuTransfer;
+    }
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "Input the account nummber you are\nreffering to: "; cin >> inputRekening;
+    system("cls");
+    int indeksTujuan = cariIndeksDariRekening();
+    if (indeksTujuan == -1)
+    {
+        cout << "=============================================" << endl;
+        cout << "Account number not found\nPlease try again" << endl;
+        cout << "=============================================" << endl;
+        system("pause");
+        goto menuTransfer;
+    }else
+    {
+        dataNasabah[id_kartu_atm].saldo -= uang_transfer;
+        dataNasabah[indeksTujuan].saldo += uang_transfer;
+        cout << "=============================================" << endl;
+        cout << "\n\t\t\b\bTransaction succeed!\n" << endl;
+        cout << "=============================================" << endl;
+        Sleep(3000);
+    }
 }
 void kartu_atm()
 {
@@ -376,6 +461,7 @@ void tarikTunai()
             (dataNasabah[id_kartu_atm].saldo -= 1000000);
             cout << "=============================================" << endl;
             cout << "\t\b\bSelamat! Transaksi Anda berhasil" << endl;
+   
             cout << "Silakan ambil uang Anda" << endl;
             cout << "=============================================" << endl;
         }
@@ -486,32 +572,101 @@ void withdraw()
 void setor_tunai()
 {
     system("cls");
-    int input_uang_tunai;
     char pilihRekening;
     menuSetorTunai:
     cout << "=============================================" << endl;
-    cout << "\t\t\t\b\bSetor Tunai" << endl;
-    cout << "Silakan masukkan uang Anda"; cin >> input_uang_tunai;
+    cout << "\t\tSetor Tunai" << endl;
+    cout << "Silakan masukkan uang Anda: "; cin >> uang_transfer;
     system("cls");
     cout << "=============================================" << endl;
-    cout << "Uang yang Anda masukkan sebesar: Rp " << input_uang_tunai;
-    cout << "=============================================" << endl;
+    cout << "Uang yang Anda masukkan sebesar: Rp " << uang_transfer;
+    cout << "\n=============================================" << endl;
     system("pause");
+    menuInputRekening:
+    system("cls");
     cout << "=============================================" << endl;
     cout << "Setoran ke:\n1. Rekening saya\n2. Rekening lain" << endl;
     cout << "Masukkan pilihan Anda (1/2): "; cin >> pilihRekening;
     if (pilihRekening == '1')
     {
         system("cls");
-        dataNasabah[id_kartu_atm].saldo += input_uang_tunai;
+        dataNasabah[id_kartu_atm].saldo += uang_transfer;
     }else if (pilihRekening == '2')
     {
         system("cls");
-
+        cout << "=============================================" << endl;
+        cout << "Masukkan nomer rekening yang Anda tuju: "; cin >> inputRekening;
+        system("cls");
+        int indeksTujuan = cariIndeksDariRekening();
+        if (indeksTujuan == -1)
+        {
+            cout << "=============================================" << endl;
+            cout << "Nomer rekening tidak ditemukan\nSilakan coba lagi" << endl;
+            cout << "=============================================" << endl;
+            system("pause");
+         goto menuInputRekening;
+        }else
+        {
+            dataNasabah[indeksTujuan].saldo += uang_transfer;
+            cout << "=============================================" << endl;
+            cout << "\n\t\t\b\bTransaksi Berhasil!\n" << endl;
+            cout << "=============================================" << endl;
+            Sleep(3000);
+        }
     }else
     {
         invalid_input_INA();
         goto menuSetorTunai;
+    }
+}
+void cashDeposit()
+{
+    system("cls");
+    char pilihRekening;
+    menuCashDeposit:
+    cout << "=============================================" << endl;
+    cout << "\t\t\t\b\bCash Deposit" << endl;
+    cout << "Please put your money: "; cin >> uang_transfer;
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "Your money amount: Rp " << uang_transfer;
+    cout << "\n=============================================" << endl;
+    system("pause");
+    menuInputAccount:
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "Doposit to:\n1. My account\n2. Other account" << endl;
+    cout << "Input your choice (1/2): "; cin >> pilihRekening;
+    if (pilihRekening == '1')
+    {
+        system("cls");
+        dataNasabah[id_kartu_atm].saldo += uang_transfer;
+    }else if (pilihRekening == '2')
+    {
+        system("cls");
+        cout << "=============================================" << endl;
+        cout << "Input the account number you are\nreffering to: "; cin >> inputRekening;
+        system("cls");
+        int indeksTujuan = cariIndeksDariRekening();
+        if (indeksTujuan == -1)
+        {
+            cout << "=============================================" << endl;
+            cout << "Account number not found\nPlease try again" << endl;
+            cout << "=============================================" << endl;
+            system("pause");
+         goto menuInputAccount;
+        }else
+        {
+            dataNasabah[indeksTujuan].saldo += uang_transfer;
+            cout << "=============================================" << endl;
+            cout << "\t\tTransaction succeed!" << endl;
+            cout << "=============================================" << endl;
+            Sleep(3000);
+        }
+    }else
+    {
+        invalid_input_INA();
+        goto menuCashDeposit;
     }
 }
 void saldoTidakCukup()
