@@ -1,5 +1,5 @@
 #include <iostream>
-#include <windows.h> //Fungsi sleep() dan system() merupakan bagian dari library ini
+#include <windows.h> //Fungsi sleep() dan system() merupakan bagian dari header ini
 #include "database.h"//Menginpor struct dan fungsi yang ada di file database.h
 using namespace std;
 
@@ -9,6 +9,7 @@ int id_kartu_atm;//identitas user selama menggunakan program
 //Inisialisasi Database
 database dataNasabah[banyakData] =
 {
+   //"nama", id, "noRek", "pin", saldo
     {"Ucup", 0, "12345", "112233", 1000000},
     {"Otong", 1, "67890", "445566", 2500000}
 };
@@ -48,8 +49,9 @@ int main()
     char pilihan_bahasa = input_pilihan_bahasa();
     if (pilihan_bahasa == '1')
     {
+        //Lanjutkan program dengan bahasa Indonesia
         inputPin_INA();
-        pilih_menu:
+        pilih_menu: //label goto statement
         char pilihanMenu = menu_INA();
         if (pilihanMenu == '1')
         {
@@ -66,7 +68,7 @@ int main()
         }else
         {
             invalid_input_INA();
-            goto pilih_menu;
+            goto pilih_menu; // goto statement, ketika dieksekusi program kembali ke label.
         }
         tampilkanSaldo();
         system("cls");
@@ -87,14 +89,16 @@ int main()
             cout << "=============================================" << endl;
             Sleep(3000);
             system("cls");
-            exit(0);
+            exit(0); //menghentikan program
         }else
         {
             invalid_input_INA();
             goto lanjutkanMenu;
         }
+
     }else
     {
+        //Lanjutkan program dengan bahasa Inggris
         inputPin_ENG();
         select_menu:
         char selectedMenu = menu_ENG();
@@ -109,7 +113,6 @@ int main()
             /* code */
         }else if (selectedMenu == '4')
         {
-            /* code */
         }else
         {
             invalid_input_ENG();
@@ -154,7 +157,7 @@ void invalid_input_INA()
     cout << "=============================================" << endl;
     cout << "\t\b\bInput tidak valid. Silakan coba lagi" << endl;
     cout << "=============================================" << endl;
-    system("pause");
+    system("pause"); //menghentikan program sampai user menekan tombol manapun
 }
 void invalid_input_ENG()
 {
@@ -185,13 +188,13 @@ void kartu_atm()
         cout << "ERROR: Kartu yang Anda masukkan tidak valid\nSilakan ambil kembali kartu Anda" << endl;
         cout << "---------------------------------------------" << endl;
         cout << "ERROR: You entered an invalid card\nPlease, take back your card" << endl;
-        exit(1);
+        exit(0);
     }
 }
 char input_pilihan_bahasa()
 {
     char pilihan_bahasa;
-    pilihBahasa://label untuk statement goto
+    pilihBahasa:
     cout << "=============================================" << endl;
     cout << "\tSilakan pilih bahasa Anda" << endl;
     cout << "---------------------------------------------" << endl;
@@ -210,9 +213,9 @@ char input_pilihan_bahasa()
         cout << "\n\tPress any key to continue" <<endl;
         cout << "=============================================" << endl;
 
-        system("pause");//menghentikan program sampai user menekan tombol ,manapun
+        system("pause");
         system("cls");
-        goto pilihBahasa;//statement goto, ketika dijalankan program langsung/balik lagi menuju ke label.
+        goto pilihBahasa;
     }
     return pilihan_bahasa;
     
