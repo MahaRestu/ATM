@@ -1,41 +1,35 @@
 #include <iostream>
 #include <windows.h> //Fungsi sleep() dan system() merupakan bagian dari library ini
+#include "database.h"//Menginpor struct dan fungsi yang ada di file database.h
 using namespace std;
 
-//Inisiasi variable-variable
-string pin = "241063";
-int saldo = 1170000;//1.170.000
+//Inisialisasi variable-variable
+//int saldo = 1170000;//1.170.000
+char id_kartu_atm;//identitas user selama menggunakan program
 
-//inisiasi function
-void tampilan_awal();
+//Mengisi Database
+database dataNasabah[banyakData] =
+{
+    {"ucup",'0',"241063","112233",1000000},//1.000.000
+    {"Otong",'1',"117000","445566",2500000}//2.500.000
+};
+//Deklasrasi function
+
 void kartu_atm();
 char input_pilihan_bahasa();
 void inputPin_INA();
 int menu_INA();
+void tarikTunai();
+void setor_tunai();
+
+void saldoTidakCukup();
 void inputPin_ENG();
 int menu_ENG();
+void withdraw();
+void insufficientBalance();
 
 //Program Utama
 int main()
-{
-    tampilan_awal();
-    kartu_atm();
-    char pilihan_bahasa = input_pilihan_bahasa();
-    if (pilihan_bahasa == '1')
-    {
-        inputPin_INA();
-        menu_INA();
-    }else
-    {
-        inputPin_ENG();
-        menu_ENG();
-    }
-    
-    return 0;
-}
-
-//Isi dari fungsi-fungsi
-void tampilan_awal()
 {
     cout << "=============================================" << endl;
     cout << "\t\t\b\bSelamat Datang di" << endl;
@@ -44,12 +38,37 @@ void tampilan_awal()
     cout << "\t\t  Welcome to" << endl;
     cout << "\t\tCeritanya ATM" << endl;
     cout << "=============================================" << endl;
-    Sleep(2000);//baris 18-24 akan ditampilkan selama 3000 milidetik
+    Sleep(2000);//7 baris terakhir akan ditampilkan selama 3000 milidetik
     system("cls");//membersihkan/mengosongkan layar
+    kartu_atm();
+    char pilihan_bahasa = input_pilihan_bahasa();
+    if (pilihan_bahasa == '1')
+    {
+        inputPin_INA();
+        char pilihanMenu = menu_INA();
+        if (pilihanMenu == '1')
+        {
+            tarikTunai();
+        }
+        
+    }else
+    {
+        inputPin_ENG();
+        char selectedMenu = menu_ENG();
+        if (selectedMenu == '1')
+        {
+            withdraw();
+        }
+        
+    }
+    
+    return 0;
 }
+
+//Isi dari fungsi-fungsi
+
 void kartu_atm()
 {
-    char input_kartu_atm;
     cout << "=============================================" << endl;
     cout << "\t\b\bSilakan Masukkan Kartu ATM Anda" << endl;
     cout << " (Tekan tombol mana saja untuk melanjutkan)" << endl;
@@ -57,19 +76,19 @@ void kartu_atm()
     cout << "\t Enter Your ATM Card Please" << endl;
     cout << "\t(Press any key to continue)" << endl;
     cout << "=============================================" << endl;
-    cin>> input_kartu_atm;
+    cin>> id_kartu_atm;
     //Mengidentifikasi kartu
-    if (input_kartu_atm != '4')
+    if (id_kartu_atm == dataNasabah[0].idKartu | id_kartu_atm == dataNasabah[1].idKartu)
+    {
+        Sleep(500);
+        system("cls");
+    }else
     {
         system("cls");
         cout << "ERROR: Kartu yang Anda masukkan tidak valid\nSilakan ambil kembali kartu Anda" << endl;
         cout << "---------------------------------------------" << endl;
         cout << "ERROR: You entered an invalid card\nPlease, take back your card" << endl;
         exit(1);
-    }else
-    {
-        Sleep(500);
-        system("cls");
     }
 }
 char input_pilihan_bahasa()
@@ -112,7 +131,7 @@ void inputPin_INA()
         cout << "\t\t\b\bMasukkan Pin Anda: " <<endl;
         cout << "\t\t\t\b\b"; cin >> input_pin;
         cout << "=============================================" << endl;
-        if (input_pin == pin)
+        if (input_pin == dataNasabah[(int)id_kartu_atm].pin)//mengganti tipe data id_kartu_atm menjadi int, kemudian mengambil pin dari dataNasabah sesuai dengan id_kartu_atm
         {
             system("cls");
         }else
@@ -137,7 +156,7 @@ void inputPin_INA()
             }
             
         }
-    } while (input_pin != pin && hitungPinSalah < 3);
+    } while (input_pin != dataNasabah[(int)id_kartu_atm].pin && hitungPinSalah < 3);
     
 }
 void inputPin_ENG()
@@ -151,7 +170,7 @@ void inputPin_ENG()
         cout << "\t\tEnter your Pin: " <<endl;
         cout << "\t\t\t\b\b"; cin >> input_pin;
         cout << "=============================================" << endl;
-        if (input_pin == pin)
+        if (input_pin == dataNasabah[(int)id_kartu_atm].pin)
         {
             system("cls");
         }else
@@ -176,11 +195,11 @@ void inputPin_ENG()
             }
             
         }
-    } while (input_pin != pin && incorrectPinCount < 3);
+    } while (input_pin != dataNasabah[(int)id_kartu_atm].pin && incorrectPinCount < 3);
 }
 int menu_INA()
 {
-    int pilihanMenu;
+    char pilihanMenu;
     cout << "=============================================" << endl;
     cout << "\t\tMenu Utama" << endl;
     cout << " Silakan pilih transaksi yang Anda inginkan" << endl;
@@ -193,7 +212,7 @@ int menu_INA()
 }
 int menu_ENG()
 {
-    int selectedMenu;
+    char selectedMenu;
     cout << "=============================================" << endl;
     cout << "\t\t  Main Menu" << endl;
     cout << " Choose your prefered transaction" << endl;
@@ -203,4 +222,218 @@ int menu_ENG()
     cout << "=============================================" << endl;
     system("cls");
     return selectedMenu;
+}
+void tarikTunai()
+{
+    char pilihNominal;
+    int nominalLain;
+    menuTarikTunai:
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "\t\tTarik Tunai\n" << endl;
+    cout << "1. Rp 100.000\t3. Rp 1.000.000" << endl;
+    cout << "2. Rp 500.000\t4. Nominal lainnya" << endl;
+    cout << "Masukkan nominal transaksi Anda (1/2/3/4):"; cin >> pilihNominal;
+    if (pilihNominal == '1')
+    {
+        if (dataNasabah[(int)id_kartu_atm].saldo < 100000)
+        {
+            saldoTidakCukup();
+            goto menuTarikTunai;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo - 100000);
+            cout << "=============================================" << endl;
+            cout << "\t\b\bSelamat! Transaksi Anda berhasil" << endl;
+            cout << "Silakan ambil uang Anda" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else if (pilihNominal == '2')
+    {
+        if (dataNasabah[(int)id_kartu_atm].saldo < 500000)
+        {
+            saldoTidakCukup();
+            goto menuTarikTunai;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo - 500000);
+            cout << "=============================================" << endl;
+            cout << "\t\b\bSelamat! Transaksi Anda berhasil" << endl;
+            cout << "Silakan ambil uang Anda" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else if (pilihNominal == '3')
+    {
+        if (dataNasabah[(int)id_kartu_atm].saldo < 1000000)
+        {
+            saldoTidakCukup();
+            goto menuTarikTunai;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo - 1000000);
+            cout << "=============================================" << endl;
+            cout << "\t\b\bSelamat! Transaksi Anda berhasil" << endl;
+            cout << "Silakan ambil uang Anda" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else if (pilihNominal == '4')
+    {
+        system("cls");
+        cout << "=============================================" << endl;
+        cout << "Silakan masukkan nominal: Rp "; cin >> nominalLain;
+        if (dataNasabah[(int)id_kartu_atm].saldo < nominalLain)
+        {
+            saldoTidakCukup();
+            goto menuTarikTunai;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo - nominalLain);
+            cout << "=============================================" << endl;
+            cout << "\t\b\bSelamat! Transaksi Anda berhasil" << endl;
+            cout << "Silakan ambil uang Anda" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else
+    {
+        system("cls");
+        cout << "=============================================" << endl;
+        cout << "\t\b\bInput tidak valid. Silakan coba lagi" << endl;
+        cout << "=============================================" << endl;
+        system("pause");
+        goto menuTarikTunai;
+    }
+}
+void withdraw()
+{
+    char pilihNominal;
+    int nominalLain;
+    withdrawMenu:
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "\t\t\t\b\bwithdraw\n" << endl;
+    cout << "1. Rp 100.000\t3. Rp 1.000.000" << endl;
+    cout << "2. Rp 500.000\t4. Other nominal" << endl;
+    cout << "Enter the amount of your transaction (1/2/3/4):"; cin >> pilihNominal;
+    if (pilihNominal == '1')
+    {
+        if (dataNasabah[(int)id_kartu_atm].saldo < 100000)
+        {
+            insufficientBalance();
+            goto withdrawMenu;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo-100000);
+            cout << "=============================================" << endl;
+            cout << "Conratulations! Your transaction\nis success" << endl;
+            cout << "Please take your money" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else if (pilihNominal == '2')
+    {
+        if (dataNasabah[(int)id_kartu_atm].saldo < 500000)
+        {
+            insufficientBalance();
+            goto withdrawMenu;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo-500000);
+            cout << "=============================================" << endl;
+            cout << "Conratulations! Your transaction\nis success" << endl;
+            cout << "Please take your money" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else if (pilihNominal == '3')
+    {
+        if (dataNasabah[(int)id_kartu_atm].saldo < 1000000)
+        {
+            insufficientBalance();
+            goto withdrawMenu;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo-1000000);
+            cout << "=============================================" << endl;
+            cout << "Conratulations! Your transaction\nis success" << endl;
+            cout << "Please take your money" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else if (pilihNominal == '4')
+    {
+        system("cls");
+        cout << "=============================================" << endl;
+        cout << "Enter nominal: Rp "; cin >> nominalLain;
+        if (dataNasabah[(int)id_kartu_atm].saldo < nominalLain)
+        {
+            insufficientBalance();
+            goto withdrawMenu;
+        }else
+        {
+            system("cls");
+            (dataNasabah[(int)id_kartu_atm].saldo-nominalLain);
+            cout << "=============================================" << endl;
+            cout << "Conratulations! Your transaction\nis success" << endl;
+            cout << "Please take your money" << endl;
+            cout << "=============================================" << endl;
+        }
+    }else
+    {
+        system("cls");
+        cout << "=============================================" << endl;
+        cout << "\t\b\bInvalid input. Please try again" << endl;
+        cout << "=============================================" << endl;
+        system("pause");
+        goto withdrawMenu;
+    }
+}
+void setor_tunai()
+{
+    system("cls");
+    int input_uang_tunai;
+    char pilihRekening;
+    cout << "=============================================" << endl;
+    cout << "\t\t\t\b\bSetor Tunai" << endl;
+    cout << "Silakan masukkan uang Anda"; cin >> input_uang_tunai;
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "Uang yang Anda masukkan sebesar: Rp " << input_uang_tunai;
+    cout << "=============================================" << endl;
+    system("pause");
+    cout << "=============================================" << endl;
+    cout << "Setoran ke:\n1. Rekening saya\n2. Rekening lain" << endl;
+    cout << "Masukkan pilihan Anda (1/2): "; cin >> pilihRekening;
+    if (pilihRekening == '1')
+    {
+        system("cls");
+
+    }else if (pilihRekening == '2')
+    {
+        /* code */
+    }else
+    {
+        /* code */
+    }
+}
+void saldoTidakCukup()
+{
+    system("cls");
+            cout << "=============================================" << endl;
+            cout << "Saldo Anda tidak cukup untuk melanjutkan\ntransaksi" << endl;
+            cout << "Saldo Anda: Rp " << dataNasabah[(int)id_kartu_atm].saldo << endl;
+            cout << "=============================================" << endl;
+            system("pause");
+}
+void insufficientBalance()
+{
+    system("cls");
+            cout << "=============================================" << endl;
+            cout << "Your balance is insufficient to complete\nthe transaction" << endl;
+            cout << "Your balance: Rp " << dataNasabah[(int)id_kartu_atm].saldo << endl;
+            cout << "=============================================" << endl;
+            system("pause");
 }
