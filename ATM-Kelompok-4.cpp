@@ -21,12 +21,14 @@ void inputPin_INA();
 int menu_INA();
 void tarikTunai();
 void setor_tunai();
-
+void tampilkanSaldo();
 void saldoTidakCukup();
+
 void invalid_input_ENG();
 void inputPin_ENG();
 int menu_ENG();
 void withdraw();
+void displayBalance();
 void insufficientBalance();
 
 //Program Utama
@@ -60,17 +62,37 @@ int main()
             /* code */
         }else if (pilihanMenu == '4')
         {
-            /* code */
+            //dikosongkan supaya langsung menuju tampilkanSaldo()
         }else
         {
             invalid_input_INA();
             goto pilih_menu;
         }
-        
-        
-        
-        
-        
+        tampilkanSaldo();
+        system("cls");
+        lanjutkanMenu:
+        char lanjutkanTransaksiInput;
+        cout << "=============================================" << endl;
+        cout << "Apakah Anda ingin melanjutkan transaksi?" << endl;
+        cout << "1. Ya\n2. Tidak\nMasukkan pilihan Anda(1/2)?"; cin >> lanjutkanTransaksiInput;
+        if (lanjutkanTransaksiInput == '1')
+        {
+            system("cls");
+            goto pilih_menu;
+        }else if (lanjutkanTransaksiInput == '2')
+        {
+            system("cls");
+            cout << "=============================================" << endl;
+            cout << "\n\tTerimaksih telah bertransaksi\n" << endl;
+            cout << "=============================================" << endl;
+            Sleep(3000);
+            system("cls");
+            exit(0);
+        }else
+        {
+            invalid_input_INA();
+            goto lanjutkanMenu;
+        }
     }else
     {
         inputPin_ENG();
@@ -93,7 +115,32 @@ int main()
             invalid_input_ENG();
             goto select_menu;
         }
-        
+        displayBalance();
+        system("cls");
+        continueTransaction:
+        char continueTransactionInput;
+        cout << "=============================================" << endl;
+        cout << "Do you want to transact again?" << endl;
+        cout << "1. Yes\n2. No\nInput your choice(1/2)?"; cin >> continueTransactionInput;
+        if (continueTransactionInput == '1')
+        {
+            system("cls");
+            goto select_menu;
+        }else if (continueTransactionInput == '2')
+        {
+            system("cls");
+            cout << "=============================================" << endl;
+            cout << "\n\tThanks for your transaction\n" << endl;
+            cout << "=============================================" << endl;
+            Sleep(3000);
+            system("cls");
+            exit(0);
+        }else
+        {
+            invalid_input_INA();
+            goto continueTransaction;
+        }
+
     }
     
     return 0;
@@ -476,9 +523,25 @@ void saldoTidakCukup()
 void insufficientBalance()
 {
     system("cls");
-            cout << "=============================================" << endl;
-            cout << "Your balance is insufficient to complete\nthe transaction" << endl;
-            cout << "Your balance: Rp " << dataNasabah[id_kartu_atm].saldo << endl;
-            cout << "=============================================" << endl;
-            system("pause");
+    cout << "=============================================" << endl;
+    cout << "Your balance is insufficient to complete\nthe transaction" << endl;
+    cout << "Your balance: Rp " << dataNasabah[id_kartu_atm].saldo << endl;
+    cout << "=============================================" << endl;
+    system("pause");
+}
+void tampilkanSaldo()
+{
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "Sisa saldo Anda sebesar: Rp " << dataNasabah[id_kartu_atm].saldo <<endl;
+    cout << "=============================================" << endl;
+    system("pause");
+}
+void displayBalance()
+{
+    system("cls");
+    cout << "=============================================" << endl;
+    cout << "Your balance: Rp " << dataNasabah[id_kartu_atm].saldo <<endl;
+    cout << "=============================================" << endl;
+    system("pause");
 }
