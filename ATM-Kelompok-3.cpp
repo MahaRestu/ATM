@@ -8,14 +8,8 @@ int id_kartu_atm;//identitas user selama menggunakan program
 string inputRekening;
 int uang_transfer;
 
-//Inisialisasi Database
-database dataNasabah[banyakData] =
-{
-   //"nama", id, "noRek", "pin", saldo
-    {"Ucup", 0, "12345", "112233", 1000000},
-    {"Otong", 1, "67890", "445566", 2500000}
-};
-//Deklasrasi function
+
+//Dklasrasi function
 
 void kartu_atm();
 char input_pilihan_bahasa();
@@ -155,8 +149,11 @@ int main()
     return 0;
 }
 
-//Isi dari fungsi-fungsi
+/*
+Isi dari fungsi-fungsi
+*/
 
+//Menampilkan pesan input yang salah. Bahasa Indonesia
 void invalid_input_INA()
 {
     system("cls");
@@ -165,6 +162,7 @@ void invalid_input_INA()
     cout << "=============================================" << endl;
     system("pause"); //menghentikan program sampai user menekan tombol manapun
 }
+//Menampilkan pesan invalid input. Bahasa Inggris
 void invalid_input_ENG()
 {
     system("cls");
@@ -173,6 +171,7 @@ void invalid_input_ENG()
     cout << "=============================================" << endl;
     system("pause");
 }
+//Mencari indeks array database berdasarkan nomer rekening
 int cariIndeksDariRekening()
 {
     for (int i = 0; i < banyakData; i++)
@@ -184,6 +183,7 @@ int cariIndeksDariRekening()
     }
     return -1;
 }
+//Program transfer. Bahasa Indonesia
 void transfer_INA()
 {
     system("cls");
@@ -218,6 +218,7 @@ void transfer_INA()
         Sleep(3000);
     }
 }
+//Program transfer. Bahasa Inggris
 void transfer_ENG()
 {
      system("cls");
@@ -252,14 +253,15 @@ void transfer_ENG()
         Sleep(3000);
     }
 }
+//Meminta user memasukkan sebuah angka (kartu ATM) yang digunakan sebagai identitas user
 void kartu_atm()
 {
     cout << "=============================================" << endl;
     cout << "\t\b\bSilakan Masukkan Kartu ATM Anda" << endl;
-    cout << " (Tekan tombol mana saja untuk melanjutkan)" << endl;
+    cout << "   (Masukkan satu digit nomer sebagai ID)" << endl;
     cout << "---------------------------------------------" << endl;
     cout << "\t Enter Your ATM Card Please" << endl;
-    cout << "\t(Press any key to continue)" << endl;
+    cout << "\t(Enter one digit number as ID)" << endl;
     cout << "=============================================" << endl;
     cin>> id_kartu_atm;
     //Mengidentifikasi kartu
@@ -276,6 +278,7 @@ void kartu_atm()
         exit(0);
     }
 }
+//Meminta user untuk memilih bahasa
 char input_pilihan_bahasa()
 {
     char pilihan_bahasa;
@@ -305,6 +308,7 @@ char input_pilihan_bahasa()
     return pilihan_bahasa;
     
 }
+//Meminta user memasukkan pin. Bahasa Indonesia
 void inputPin_INA()
 {
     string input_pin;
@@ -344,6 +348,7 @@ void inputPin_INA()
     } while (input_pin != dataNasabah[id_kartu_atm].pin && hitungPinSalah < 3);
     
 }
+//Meminta user memasukkan pin. Bahasa Indonesia
 void inputPin_ENG()
 {
     string input_pin;
@@ -382,6 +387,7 @@ void inputPin_ENG()
         }
     } while (input_pin != dataNasabah[id_kartu_atm].pin && incorrectPinCount < 3);
 }
+//Menampilkan menu utama ATM, meminta input pilihan menu. Bahasa Indonesia
 int menu_INA()
 {
     char pilihanMenu;
@@ -395,6 +401,7 @@ int menu_INA()
     system("cls");
     return pilihanMenu;
 }
+//Menampilkan menu utama ATM, meminta input pilihan menu. Bahasa Inggris
 int menu_ENG()
 {
     char selectedMenu;
@@ -408,6 +415,7 @@ int menu_ENG()
     system("cls");
     return selectedMenu;
 }
+//Program Tarik Tunai. Bahasa Indonesia
 void tarikTunai()
 {
     char pilihNominal;
@@ -489,6 +497,7 @@ void tarikTunai()
         goto menuTarikTunai;
     }
 }
+//Program Tarik Tunai. Bahasa Inggris
 void withdraw()
 {
     char pilihNominal;
@@ -569,6 +578,7 @@ void withdraw()
         goto withdrawMenu;
     }
 }
+//Program setor tunai. Bahasa Indonesia
 void setor_tunai()
 {
     system("cls");
@@ -619,6 +629,7 @@ void setor_tunai()
         goto menuSetorTunai;
     }
 }
+//Program setor tunai. Bahasa Inggris
 void cashDeposit()
 {
     system("cls");
@@ -669,6 +680,7 @@ void cashDeposit()
         goto menuCashDeposit;
     }
 }
+//Menampilkan pesan bahwa saldo tidak cukup. Bahasa Indonesia
 void saldoTidakCukup()
 {
     system("cls");
@@ -678,6 +690,7 @@ void saldoTidakCukup()
             cout << "=============================================" << endl;
             system("pause");
 }
+//Menampilkan pesan bahwa saldo tidak cukup. Bahasa Inggris
 void insufficientBalance()
 {
     system("cls");
@@ -687,6 +700,7 @@ void insufficientBalance()
     cout << "=============================================" << endl;
     system("pause");
 }
+//Menampilkan saldo terkini. Bahasa Indonesia
 void tampilkanSaldo()
 {
     system("cls");
@@ -695,6 +709,7 @@ void tampilkanSaldo()
     cout << "=============================================" << endl;
     system("pause");
 }
+//Menampilkan saldo terkini. Bahasa Inggris
 void displayBalance()
 {
     system("cls");
